@@ -29,7 +29,7 @@ public class UtilisateurService {
         if (listLogExist.size()>0){
             throw new RuntimeException ("Ce login existe déjà");
         }
-        
+        // presiste
         dao.ajouterUtilisateur(u);
     }
 

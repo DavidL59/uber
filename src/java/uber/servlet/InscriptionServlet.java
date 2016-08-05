@@ -43,7 +43,7 @@ public class InscriptionServlet extends HttpServlet {
         u.setMotDePasse(mdp);
         u.setAdresse(adresse);
         u.setEmail(email);
-        u.setTypeUtil(TypeUtil.valueOf(type));
+        
         new UtilisateurService().ajouterUtilisateur(u);
 
         req.getSession().setAttribute("UtilConnecte", u);

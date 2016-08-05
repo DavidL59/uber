@@ -1,5 +1,6 @@
 package uber.DAO;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
@@ -22,6 +23,17 @@ public class UtilisateurDAO {
         return (Utilisateur) query.getSingleResult();
 
     }
+    
+    
+    public List<Utilisateur> rechercherLogin(String log) throws RuntimeException {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("uberPU").createEntityManager();
+
+        Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:monlog ");
+        query.setParameter("monlog", log);
+        
+        return query.getResultList();
+}
 
     public void ajouterUtilisateur(Utilisateur u) throws RuntimeException {
 

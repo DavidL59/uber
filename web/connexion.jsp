@@ -12,21 +12,20 @@
             <c:import url="_TITRE.jsp"/>
         </div>
         <div class="menu">
-            <c:import url="_CONNEXION.jsp"/>
+            <c:import url="_CONNECTION.jsp"/>
         </div>
         <div class="contenu">
             <h1>Log in</h1>
             <form method="post">
                 <label for="login">Login :</label>
-                <input name="login" type="text" width="150">
+                <input name="login" id="login" type="text" width="150">
                 <br />
-                
                 <br />
                 <label for="motDePasse">Mot de Passe :</label>
-                <input name="motDePasse" type="password" width="400">
+                <input name="motDePasse" id="motDePasse" type="password" width="400">
                 <br />
                 <br />
-                <input type="submit" value="Valider">
+                <input type="submit" value="Valider" id="envoyer">
             </form>
         </div>
         <div class="pied">

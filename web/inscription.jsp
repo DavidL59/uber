@@ -12,13 +12,13 @@
             <c:import url="_TITRE.jsp"/>
         </div>
         <div class="menu">
-             <c:import url="_CONNEXION.jsp"/>
+            <c:import url="_CONNECTION.jsp"/>
         </div>
         <div class="contenu">
             <h1>Inscription</h1>
             <form method="post">
                 <label for="login">Entrez un login utilisateur :</label>
-                <input name="login" type="text" width="150">
+                <input name="login" type="text" width="150" pattern="^[A-Z][a-z]*" required="">
                 <br />
                 <br />
                 <label for="motDePasse">Tapez un mot de Passe :</label>
@@ -34,13 +34,14 @@
                 <br />
                 <br />
                 <label for="adresseMail">Entrez une adresse mail :</label>
-                <input name="adresseMail" type="text" width="400">
-                Client :<input name="type" type="radio" value="CLIENT">Admin :<input name="type" type="radio" value="ADMIN">
+                <input name="adresseMail" type="text" width="400" required="" pattern="^[-\+.a-zA-Z0-9]{1,64}\@[a-z]{1,12}\.[a-z]{1,5}$">
+                <br />
                 <input type="submit" value="Valider">
             </form>
         </div>
         <div class="pied">
             <c:import url="_PIED.jsp"/>
         </div>
+             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
     </body>
 </html>

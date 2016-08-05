@@ -28,9 +28,15 @@ public class ConnexionServlet extends HttpServlet {
         try {
             String log = req.getParameter("login");
             String mdp = req.getParameter("motDePasse");
+            
+            // System.out.println("email : " + log + " mdp : " + mdp);
             Utilisateur u = new UtilisateurService().verifierLoginMdp(log, mdp);
 
-            req.getSession().setAttribute("UtilConnecte", u);
+            if (u == null) {
+                throw new RuntimeException("Utilisateur inconnu!");
+            }
+
+            req.getSession().setAttribute("Utilisateur", u);
 
             resp.sendRedirect("liste_trajet");
         } catch (RuntimeException e) {
