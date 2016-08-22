@@ -15,15 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author coolsnip
+ * @author admin
  */
-@WebServlet(name = "DeconnexionServlet", urlPatterns = {"/logout"})
-public class DeconnexionServlet extends HttpServlet {
+@WebServlet(name = "NotationRouteServlet", urlPatterns = {"/notation"})
+public class NotationRouteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-         req.getSession().removeAttribute("utilConnecte");
         
-        resp.sendRedirect("index");
+        req.getRequestDispatcher("notation.jsp").forward(req, resp);
     }
-    }
+}

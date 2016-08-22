@@ -14,24 +14,65 @@ import uber.entity.Utilisateur;
  * @author coolsnip
  */
 public class UtilisateurService {
-    
-    public Utilisateur verifierLoginMdp(String log, String mdp) throws RuntimeException {
-        
-        return new UtilisateurDAO().verifierLoginMdp(log, mdp);
-    }
-    
-    public void ajouterUtilisateur (Utilisateur u) throws RuntimeException {
-        
-        UtilisateurDAO  dao = new UtilisateurDAO();
-        
-        List<Utilisateur> listLogExist = dao.rechercherLogin(u.getLogin());
-        
-        if (listLogExist.size()>0){
-            throw new RuntimeException ("Ce login existe déjà");
-        }
-        // presiste
-        dao.ajouterUtilisateur(u);
-    }
 
- 
+    public void verifLoginDuplicata(String login) {
+
+    UtilisateurDAO dao = new UtilisateurDAO();
+    
+    List<Utilisateur> listeUtilAvecCeLogin = dao.rechercherParLogin(login);
+                
+        if ( listeUtilAvecCeLogin.size() > 0 ) {
+            
+            throw new RuntimeException("ce login existe deja");
+        }
+    }
+    
+
+     public void inscription(Utilisateur util) {
+
+    UtilisateurDAO dao = new UtilisateurDAO();
+
+    List<Utilisateur> listeUtilAvecCeLogin = dao.rechercherParLogin(util.getLogin());
+                
+        if ( listeUtilAvecCeLogin.size() > 0 ) {
+            
+            throw new RuntimeException("ce login existe deja");
+        }
+        
+        dao.ajouterUtilisateur(util);
+    }
+     
+     public void modifierInfoProfil(Utilisateur util) {
+
+        new UtilisateurDAO().updateUtilisateur(util);
+    }
+    
+    public List<Utilisateur> listerDriver() {
+        
+        return (List<Utilisateur>) new UtilisateurDAO().listAllUtilisateurDriver();
+    }
+     
+     
+     
+         public List<Utilisateur> verifEtat(String login, String password) {
+        UtilisateurDAO dao = new UtilisateurDAO();
+        
+        return dao.verifEtatUtil(login, password);
+    }
+         
+         
+          public Utilisateur rechercheUtil(String nameInfo) {
+        
+        return (Utilisateur) new UtilisateurDAO().rechercheProfilParLogin(nameInfo);
+    }
+    
+    public Utilisateur rechercheUtilParId(Long taxiId) {
+        
+        return (Utilisateur) new UtilisateurDAO().rechercheTaxiParId(taxiId);
+    }
+    
+    public void deleteProfil(Long idUser) {
+        
+        new UtilisateurDAO().deleteProfilById(idUser);
+    }
 }

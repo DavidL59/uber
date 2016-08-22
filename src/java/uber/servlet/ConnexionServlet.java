@@ -6,7 +6,7 @@
 package uber.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,29 +25,30 @@ public class ConnexionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        try {
-            String log = req.getParameter("login");
-            String mdp = req.getParameter("motDePasse");
-            
-            // System.out.println("email : " + log + " mdp : " + mdp);
-            Utilisateur u = new UtilisateurService().verifierLoginMdp(log, mdp);
+        UtilisateurService service = new UtilisateurService();
 
-            if (u == null) {
-                throw new RuntimeException("Utilisateur inconnu!");
-            }
+        String login = req.getParameter("login");
+        String password = req.getParameter("pwd");
 
-            req.getSession().setAttribute("Utilisateur", u);
+        List<Utilisateur> user = service.verifEtat(login, password);
 
-            resp.sendRedirect("liste_trajet");
-        } catch (RuntimeException e) {
+        if (user.size() == 0) {
+            resp.sendRedirect("index");
+        } else {
+            req.getSession().setAttribute("utilConnecte", user.get(0));
 
-            resp.sendRedirect("inscription");
+            resp.sendRedirect("map");
         }
+        
+        
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("connexion.jsp").forward(req, resp);
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
-
+    
+        
 }
+
+

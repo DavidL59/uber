@@ -11,37 +11,83 @@ import uber.entity.Utilisateur;
  * @author coolsnip
  */
 public class UtilisateurDAO {
-
-    public Utilisateur verifierLoginMdp(String log, String mdp) throws RuntimeException {
+    
+        public List<Utilisateur> rechercherParLogin(String login) throws RuntimeException {
 
         EntityManager em = Persistence.createEntityManagerFactory("uberPU").createEntityManager();
 
-        Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:monlog AND u.motDePasse=:monmdp");
-        query.setParameter("monlog", log);
-        query.setParameter("monmdp", mdp);
-
-        return (Utilisateur) query.getSingleResult();
-
+        return em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:login").setParameter("login", login).getResultList();
     }
     
-    
-    public List<Utilisateur> rechercherLogin(String log) throws RuntimeException {
+        public Utilisateur rechercheTaxiParId(Long taxiId) {
         
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        return (Utilisateur) em.createQuery("SELECT u FROM Utilisateur u WHERE u.id=:id").setParameter("id", taxiId).getSingleResult();
+    }
+
+ public Utilisateur rechercheProfilParLogin(String oldInfo) {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        return (Utilisateur) em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:login").setParameter("login", oldInfo).getSingleResult();
+    }
+
+    public void ajouterUtilisateur(Utilisateur util) throws RuntimeException {
+
         EntityManager em = Persistence.createEntityManagerFactory("uberPU").createEntityManager();
 
-        Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:monlog ");
-        query.setParameter("monlog", log);
-        
-        return query.getResultList();
-}
-
-    public void ajouterUtilisateur(Utilisateur u) throws RuntimeException {
-
-        EntityManager em = Persistence.createEntityManagerFactory("uberPU").createEntityManager();
         em.getTransaction().begin();
 
-        em.persist(u);
+        em.persist(util);
 
+        em.getTransaction().commit();
+    }
+    
+        public List<Utilisateur> verifEtatUtil(String login, String password) {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        Query query = em.createQuery("SELECT u FROM Utilisateur u WHERE u.login=:login AND u.password=:pass");
+        query.setParameter("login", login);
+        query.setParameter("pass", password);
+        
+        return (List<Utilisateur>) query.getResultList();
+    }
+        
+            public void updateUtilisateur(Utilisateur util) {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        em.merge(util);
+        
+        em.getTransaction().commit();
+        
+    }
+    
+    public List<Utilisateur> listAllUtilisateurDriver() {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        Query query = em.createNativeQuery("SELECT * FROM Utilisateur u WHERE u.typeUtil='DRIVER'", Utilisateur.class);
+        @SuppressWarnings("unchecked")
+        List<Utilisateur> drivers = (List<Utilisateur>) query.getResultList();
+        
+        return drivers;
+    }
+    
+    public void deleteProfilById(Long idUser) {
+        
+        EntityManager em = Persistence.createEntityManagerFactory("UberPU").createEntityManager();
+        
+        em.getTransaction().begin();
+        
+        Query query = em.createQuery("DELETE FROM Utilisateur u WHERE u.id=:id");
+        query.setParameter("id", idUser);
+        query.executeUpdate();
+        
         em.getTransaction().commit();
     }
 

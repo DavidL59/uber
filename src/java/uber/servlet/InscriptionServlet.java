@@ -25,30 +25,39 @@ public class InscriptionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String log = req.getParameter("login");
-        String mdp = req.getParameter("motDePasse");
-        String mdp2 = req.getParameter("motDePasse2");
-        String email = req.getParameter("adresseMail");
-        String adresse = req.getParameter("adresse");
-        String type = req.getParameter("type");
 
-        if (!mdp.equals(mdp2)) {
+        UtilisateurService service = new UtilisateurService();
+        Utilisateur util = new Utilisateur();
 
-            resp.sendRedirect("inscription");
-            return;
+        util.setLogin(req.getParameter("login"));
+        util.setNom(req.getParameter("nom"));
+        util.setPrenom(req.getParameter("prenom"));
+        util.setDateDeNaissance(req.getParameter("dateNaissance"));
+        util.setEmail(req.getParameter("email"));
+        util.setAdresse(req.getParameter("adresse"));
+        util.setPhone(Integer.parseInt(req.getParameter("tel")));
+
+        String password = req.getParameter("pwd");
+        String passwordtwo = req.getParameter("pwd_deux");
+
+        if (!password.equals(passwordtwo)) {
+
+            throw new RuntimeException("Les mots de passe ne sont pas identique");
+        } else if (password.equals(passwordtwo)) {
+
+            util.setPassword(password);
+
         }
 
-        Utilisateur u = new Utilisateur();
-        u.setLogin(log);
-        u.setMotDePasse(mdp);
-        u.setAdresse(adresse);
-        u.setEmail(email);
-        
-        new UtilisateurService().ajouterUtilisateur(u);
+        String statut = req.getParameter("statut");
 
-        req.getSession().setAttribute("UtilConnecte", u);
+        util.setTypeUtil(TypeUtil.valueOf(statut));
 
-        resp.sendRedirect("liste_trajet");
+        service.inscription(util);
+
+        req.getSession().setAttribute("utilConnecte", util);
+
+        resp.sendRedirect("map");
     }
 
     @Override

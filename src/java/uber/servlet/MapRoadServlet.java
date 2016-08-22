@@ -7,23 +7,33 @@ package uber.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import uber.entity.Utilisateur;
+import uber.service.UtilisateurService;
 
 /**
  *
- * @author coolsnip
+ * @author eraykorz
  */
-@WebServlet(name = "DeconnexionServlet", urlPatterns = {"/logout"})
-public class DeconnexionServlet extends HttpServlet {
+@WebServlet(name = "MapRoadServlet", urlPatterns = {"/map"})
+public class MapRoadServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-         req.getSession().removeAttribute("utilConnecte");
         
-        resp.sendRedirect("index");
+        UtilisateurService service = new UtilisateurService();
+
+        // va chercher la liste de tous les utilisateurs de type driver
+        List<Utilisateur> listDriver = service.listerDriver();
+        
+        // les mets à disposition pour la page map.jsp
+        req.setAttribute("drivers", listDriver);
+        
+        req.getRequestDispatcher("map.jsp").forward(req, resp);
     }
-    }
+}
